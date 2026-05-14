@@ -1,1 +1,1255 @@
-# -
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国石油大学专业匹配测试</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    font-family:"PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f3fb; /* 浅紫背景 */
+    color: #333;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+/* 全局入场动画 */
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+@keyframes float {
+    0%,100% {transform: translateY(0);}
+    50% {transform: translateY(-8px);}
+}
+.page{display:none; animation: fadeIn 0.6s ease;}
+.active{display:block;}
+/* 顶部导航栏 */
+.header{
+    background: linear-gradient(90deg, #9d65c9, #7b4bb8); /* 紫渐变 */
+    color: white;
+    padding: 16px 20px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    position: relative;
+}
+.back-btn{
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+/* 封面页样式（参考动物测试首页） */
+.cover{
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.cover-title{
+    text-align: center;
+    margin: 30px 0 10px;
+    font-size: 28px;
+    color: #5a348b; /* 深紫主色 */
+    font-weight: bold;
+}
+.cover-subtitle{
+    text-align: center;
+    color: #8c6bc0;
+    font-size: 16px;
+    margin-bottom: 40px;
+}
+/* 测试版本选择卡片 */
+.version-cards{
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+.version-card{
+    background: white;
+    border-radius: 16px;
+    padding: 30px 20px;
+    width: 280px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(157, 101, 201, 0.1);
+    position: relative;
+}
+.recommend-tag{
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    background: #9d65c9;
+    color: white;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+.version-icon{
+    font-size: 32px;
+    margin-bottom: 15px;
+    color: #9d65c9;
+}
+.version-name{
+    font-size: 20px;
+    font-weight: 600;
+    color: #5a348b;
+    margin-bottom: 8px;
+}
+.version-desc{
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 20px;
+}
+.start-btn{
+    background: linear-gradient(90deg, #9d65c9, #7b4bb8);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.start-btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(157, 101, 201, 0.2);
+}
+/* 专业图鉴区域 */
+.major-gallery{
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(157, 101, 201, 0.1);
+}
+.gallery-title{
+    font-size: 20px;
+    font-weight: 600;
+    color: #5a348b;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.major-grid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+.major-item{
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.major-item:hover{
+    transform: scale(1.05);
+}
+.major-icon{
+    width: 60px;
+    height: 60px;
+    background: #f0e9fa;
+    border-radius: 12px;
+    margin: 0 auto 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #9d65c9;
+}
+.major-name{
+    font-size: 12px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.view-more{
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #9d65c9;
+    text-decoration: none;
+    font-size: 15px;
+    cursor: pointer;
+}
+.view-more:hover{
+    text-decoration: underline;
+}
+/* 答题页面样式 */
+.test-container{
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+.question-card{
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(157, 101, 201, 0.1);
+    margin-bottom: 20px;
+}
+.progress-bar{
+    height: 8px;
+    background: #eee;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+.progress-fill{
+    height: 100%;
+    background: linear-gradient(90deg, #9d65c9, #7b4bb8);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+}
+.progress-text{
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 20px;
+    text-align: right;
+}
+.question-text{
+    font-size: 18px;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+.answer-options{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.answer-option{
+    background: #f9f7fd;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.answer-option:hover{
+    background: #f0e9fa;
+    border-color: #e1d4f5;
+}
+.answer-option input{
+    display: none;
+}
+.answer-option.selected{
+    background: #f0e9fa;
+    border-color: #9d65c9;
+}
+.btn-group{
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+.nav-btn{
+    background: white;
+    border: 1px solid #9d65c9;
+    color: #9d65c9;
+    padding: 10px 25px;
+    border-radius: 30px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.nav-btn:hover{
+    background: #f0e9fa;
+}
+.nav-btn.primary{
+    background: linear-gradient(90deg, #9d65c9, #7b4bb8);
+    color: white;
+    border: none;
+}
+.nav-btn.primary:hover{
+    box-shadow: 0 6px 15px rgba(157, 101, 201, 0.2);
+}
+.nav-btn:disabled{
+    background: #eee;
+    color: #ccc;
+    border-color: #eee;
+    cursor: not-allowed;
+}
+/* 结果弹窗/详情样式 - 核心修改：提升z-index到更高层级 */
+.result-modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999; /* 从1000提升到9999，确保最顶层 */
+    padding: 20px;
+    /* 新增：确保弹窗捕获点击事件，不被下层元素干扰 */
+    pointer-events: auto;
+}
+.modal-content{
+    background: white;
+    border-radius: 16px;
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 30px;
+    position: relative;
+    animation: fadeIn 0.4s ease;
+    /* 新增：内容层也提升层级 */
+    z-index: 10000;
+}
+/* 完整图鉴弹窗样式 */
+.full-gallery-modal .modal-content {
+    max-width: 800px;
+    padding: 20px;
+}
+.full-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+@media (max-width: 768px) {
+    .full-gallery-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media (max-width: 480px) {
+    .full-gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+.close-btn{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #999;
+    cursor: pointer;
+    /* 新增：关闭按钮层级更高 */
+    z-index: 10001;
+}
+/* 结果页面样式 */
+.result-page{
+    padding: 20px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+.major-result-card{
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(157, 101, 201, 0.1);
+    margin-bottom: 30px;
+}
+.major-icon-big{
+    width: 100px;
+    height: 100px;
+    background: #f0e9fa;
+    border-radius: 20px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: #9d65c9;
+    animation: float 4s ease-in-out infinite;
+}
+.major-result-name{
+    font-size: 28px;
+    color: #5a348b;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+.major-type{
+    font-size: 16px;
+    color: #9d65c9;
+    margin-bottom: 25px;
+}
+.result-btn-group{
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+.result-btn{
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+}
+.result-btn.primary{
+    background: linear-gradient(90deg, #9d65c9, #7b4bb8);
+    color: white;
+}
+.result-btn.secondary{
+    background: #f9f7fd;
+    color: #9d65c9;
+}
+.result-section{
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(157, 101, 201, 0.1);
+}
+.section-title{
+    font-size: 18px;
+    color: #5a348b;
+    font-weight: 600;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.section-title i{
+    color: #f9d148;
+}
+.major-analysis{
+    color: #666;
+    line-height: 1.7;
+    font-size: 15px;
+    margin-bottom: 15px;
+}
+/* 搞笑调侃样式 */
+.funny-comment {
+    background: #fff6e0;
+    border: 1px solid #ffe082;
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 15px;
+    font-size: 15px;
+    color: #e65100;
+    font-weight: 500;
+    line-height: 1.6;
+}
+/* 核心特质标签 */
+.trait-tags{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.trait-tag{
+    background: #f9f7fd;
+    border: 1px solid #e1d4f5;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    color: #5a348b;
+    font-size: 15px;
+}
+/* 四维度分析 */
+.dimension-item{
+    margin-bottom: 15px;
+}
+.dimension-label{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+.dimension-name{
+    color: #666;
+}
+.dimension-value{
+    color: #9d65c9;
+    font-weight: 600;
+}
+.dimension-bar{
+    height: 8px;
+    background: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.dimension-fill{
+    height: 100%;
+    background: linear-gradient(90deg, #9d65c9, #7b4bb8);
+    border-radius: 4px;
+}
+/* 测试信息 */
+.test-info{
+    background: #f9f7fd;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+.info-item{
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+.info-item:last-child{
+    border-bottom: none;
+}
+.info-label{
+    color: #999;
+}
+.info-value{
+    color: #666;
+    font-weight: 500;
+}
+/* 重新测试按钮 */
+.retest-btn{
+    display: block;
+    width: 200px;
+    margin: 0 auto;
+    background: #f9f7fd;
+    border: 1px solid #e1d4f5;
+    color: #9d65c9;
+    padding: 12px;
+    border-radius: 30px;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+.retest-btn:hover{
+    background: #f0e9fa;
+}
+</style>
+</head>
+<body>
+<!-- 顶部导航 -->
+<div class="header">
+    <button class="back-btn" onclick="goBack()">←</button>
+    中国石油大学专业匹配测试
+</div>
+<!-- 封面页 -->
+<div id="cover" class="page active">
+    <div class="cover">
+        <h1 class="cover-title">专业匹配测试</h1>
+        <p class="cover-subtitle">发现最适合你的石油大学专业方向</p>
+        
+        <!-- 版本选择 -->
+        <div class="version-cards">
+            <div class="version-card">
+                <div class="recommend-tag">推荐</div>
+                <div class="version-icon">⚡</div>
+                <div class="version-name">简约版</div>
+                <div class="version-desc">20题 · 1-2分钟</div>
+                <button class="start-btn" onclick="startTest('simple')">开始测试</button>
+            </div>
+            <div class="version-card">
+                <div class="version-icon">⭐</div>
+                <div class="version-name">完整版</div>
+                <div class="version-desc">40题 · 2-3分钟</div>
+                <button class="start-btn" onclick="startTest('full')">开始测试</button>
+            </div>
+        </div>
+        <!-- 专业图鉴 -->
+        <div class="major-gallery">
+            <h2 class="gallery-title">热门专业图鉴</h2>
+            <div class="major-grid">
+                <div class="major-item" onclick="showMajorDetail('石油工程')">
+                    <div class="major-icon">⛽</div>
+                    <div class="major-name">石油工程</div>
+                </div>
+                <div class="major-item" onclick="showMajorDetail('计算机科学与技术')">
+                    <div class="major-icon">💻</div>
+                    <div class="major-name">计算机科学</div>
+                </div>
+                <div class="major-item" onclick="showMajorDetail('机械类')">
+                    <div class="major-icon">⚙️</div>
+                    <div class="major-name">机械工程</div>
+                </div>
+                <div class="major-item" onclick="showMajorDetail('化学工程与工艺')">
+                    <div class="major-icon">🧪</div>
+                    <div class="major-name">化学工程</div>
+                </div>
+                <div class="major-item" onclick="showMajorDetail('能源经济')">
+                    <div class="major-icon">💰</div>
+                    <div class="major-name">能源经济</div>
+                </div>
+                <div class="major-item" onclick="showMajorDetail('环境工程')">
+                    <div class="major-icon">🌱</div>
+                    <div class="major-name">环境工程</div>
+                </div>
+                <div class="major-item" onclick="showMajorDetail('自动化')">
+                    <div class="major-icon">🤖</div>
+                    <div class="major-name">自动化</div>
+                </div>
+                <div class="major-item" onclick="showMajorDetail('材料科学与工程')">
+                    <div class="major-icon">🧱</div>
+                    <div class="major-name">材料工程</div>
+                </div>
+            </div>
+            <div class="view-more" onclick="showFullGallery()">查看完整图鉴 →</div>
+        </div>
+    </div>
+</div>
+<!-- 测试页面 -->
+<div id="test" class="page">
+    <div class="test-container">
+        <div class="question-card">
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill" style="width:0%"></div>
+            </div>
+            <div class="progress-text" id="progressText">第 1 / 40 题</div>
+            <div id="questionText" class="question-text"></div>
+            
+            <div class="answer-options" id="answerOptions">
+                <label class="answer-option">
+                    <input type="radio" name="ans" value="2">
+                    <span>非常符合</span>
+                </label>
+                <label class="answer-option">
+                    <input type="radio" name="ans" value="1">
+                    <span>一般</span>
+                </label>
+                <label class="answer-option">
+                    <input type="radio" name="ans" value="0">
+                    <span>不符合</span>
+                </label>
+            </div>
+            
+            <div class="btn-group">
+                <button class="nav-btn" onclick="prevQuestion()" id="prevBtn">上一题</button>
+                <button class="nav-btn primary" onclick="nextQuestion()" id="nextBtn">下一题</button>
+                <button class="nav-btn primary" onclick="submitTest()" id="submitBtn" style="display:none;">提交结果</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 结果页面 -->
+<div id="resultPage" class="page">
+    <div class="result-page">
+        <div class="major-result-card">
+            <div class="major-icon-big" id="resultIcon">⛽</div>
+            <div class="major-result-name" id="resultMajor">石油工程</div>
+            <div class="major-type" id="majorType">能源工程类</div>
+            
+            <div class="result-btn-group">
+                <button class="result-btn primary">分享结果</button>
+                <button class="result-btn secondary">查看历史</button>
+            </div>
+        </div>
+        <div class="result-section">
+            <h3 class="section-title"><i>⭐</i> 专业解析</h3>
+            <p class="major-analysis" id="majorAnalysis">
+                你追求务实与创新，对能源行业有浓厚兴趣，具备出色的工程思维和实践能力。石油工程作为学校的王牌专业，与你的性格特质和职业规划高度契合，未来发展潜力巨大。
+            </p>
+            <!-- 新增搞笑调侃区域 -->
+            <div class="funny-comment" id="funnyComment">
+                温馨调侃：选这个专业，以后家里炒菜都不用愁没油啦！
+            </div>
+        </div>
+        <div class="result-section">
+            <h3 class="section-title"><i>⭐</i> 核心特质</h3>
+            <div class="trait-tags">
+                <div class="trait-tag">工程思维</div>
+                <div class="trait-tag">实践能力</div>
+                <div class="trait-tag">抗压能力</div>
+                <div class="trait-tag">创新意识</div>
+            </div>
+        </div>
+        <div class="result-section">
+            <h3 class="section-title"><i>📊</i> 四维度分析</h3>
+            <div class="dimension-item">
+                <div class="dimension-label">
+                    <span class="dimension-name">工程能力</span>
+                    <span class="dimension-value">8</span>
+                </div>
+                <div class="dimension-bar">
+                    <div class="dimension-fill" style="width:80%"></div>
+                </div>
+            </div>
+            <div class="dimension-item">
+                <div class="dimension-label">
+                    <span class="dimension-name">科研潜力</span>
+                    <span class="dimension-value">7</span>
+                </div>
+                <div class="dimension-bar">
+                    <div class="dimension-fill" style="width:70%"></div>
+                </div>
+            </div>
+            <div class="dimension-item">
+                <div class="dimension-label">
+                    <span class="dimension-name">实践意愿</span>
+                    <span class="dimension-value">9</span>
+                </div>
+                <div class="dimension-bar">
+                    <div class="dimension-fill" style="width:90%"></div>
+                </div>
+            </div>
+            <div class="dimension-item">
+                <div class="dimension-label">
+                    <span class="dimension-name">职业匹配</span>
+                    <span class="dimension-value">9</span>
+                </div>
+                <div class="dimension-bar">
+                    <div class="dimension-fill" style="width:90%"></div>
+                </div>
+            </div>
+        </div>
+        <div class="test-info">
+            <div class="info-item">
+                <span class="info-label">测试版本</span>
+                <span class="info-value" id="testVersion">完整版</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">完成时间</span>
+                <span class="info-value" id="completeTime">${new Date().toLocaleString()}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">回答题数</span>
+                <span class="info-value" id="questionCount">40题</span>
+            </div>
+        </div>
+        <button class="retest-btn" onclick="location.reload()">重新测试</button>
+    </div>
+</div>
+<!-- 专业详情弹窗 -->
+<div id="majorModal" class="result-modal" style="display:none">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal()">×</button>
+        <div class="major-icon-big" id="modalIcon">⛽</div>
+        <div class="major-result-name" id="modalName">石油工程</div>
+        <p class="major-analysis" id="modalDesc">
+            石油工程是中国石油大学的王牌专业，主要研究石油天然气勘探、开发、储运等工程技术。该专业培养具备扎实的工程基础和实践能力的高级技术人才，就业前景广阔，是能源行业的核心专业。
+        </p>
+        <div class="trait-tags">
+            <div class="trait-tag">忠诚守护</div>
+            <div class="trait-tag">实践能力强</div>
+            <div class="trait-tag">抗压能力好</div>
+            <div class="trait-tag">团队协作</div>
+        </div>
+    </div>
+</div>
+<!-- 完整专业图鉴弹窗 -->
+<div id="fullGalleryModal" class="result-modal full-gallery-modal" style="display:none">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeFullGallery()">×</button>
+        <h2 class="gallery-title">中国石油大学 - 完整专业图鉴</h2>
+        <div class="full-gallery-grid" id="fullGalleryGrid">
+            <!-- 动态生成所有专业 -->
+        </div>
+    </div>
+</div>
+<script>
+/* ===== 题目数据 ===== */
+const simpleQuestions = [
+"你更愿意：去现场解决问题 / 在室内分析模型",
+"面对复杂系统更想：动手拆解 / 建立模型",
+"你对能源行业兴趣如何？",
+"能接受偏远地区工作吗？",
+"更喜欢机械结构还是算法？",
+"对地质资源是否感兴趣？",
+"能接受工程辛苦吗？",
+"更擅长表达还是逻辑？",
+"喜欢数据处理吗？",
+"团队中更像执行还是管理？",
+"更喜欢实验还是理论？",
+"对自动化/机器人感兴趣吗？",
+"靠直觉还是推理解决问题？",
+"是否想做管理？",
+"对勘探类是否好奇？",
+"遇难题会坚持吗？",
+"写代码有成就感吗？",
+"外向还是内向？",
+"能长时间专注吗？",
+"对机械设备是否感兴趣？"
+];
+const fullQuestions = [
+"你更愿意：去现场解决问题 / 在室内分析模型",
+"面对复杂系统更想：动手拆解 / 建立模型",
+"你对能源行业兴趣如何？",
+"能接受偏远地区工作吗？",
+"更喜欢机械结构还是算法？",
+"对地质资源是否感兴趣？",
+"能接受工程辛苦吗？",
+"更擅长表达还是逻辑？",
+"喜欢数据处理吗？",
+"团队中更像执行还是管理？",
+"更喜欢实验还是理论？",
+"对自动化/机器人感兴趣吗？",
+"靠直觉还是推理解决问题？",
+"是否想做管理？",
+"对勘探类是否好奇？",
+"遇难题会坚持吗？",
+"写代码有成就感吗？",
+"外向还是内向？",
+"能长时间专注吗？",
+"对机械设备是否感兴趣？",
+"关注经济市场吗？",
+"看好新能源吗？",
+"数学能力如何？",
+"愿意当负责人吗？",
+"喜欢读专业书吗？",
+"喜欢算法题吗？",
+"适应实验室吗？",
+"对商业决策感兴趣吗？",
+"喜欢逻辑游戏吗？",
+"对工程项目感兴趣吗？",
+"接受跨学科吗？",
+"愿意掌控项目吗？",
+"物理化学基础如何？",
+"对系统设计感兴趣吗？",
+"喜欢数据分析吗？",
+"能接受出差吗？",
+"喜欢复杂思考吗？",
+"擅长组织吗？",
+"喜欢建模吗？",
+"有创新意识吗？"
+];
+/* ===== 完整专业数据（含所有专业的图标、描述和搞笑调侃） ===== */
+const allMajorsData = {
+"石油工程":{
+    icon: "⛽",
+    type: "能源工程类",
+    desc: "你追求务实与创新，对能源行业有浓厚兴趣，具备出色的工程思维和实践能力。石油工程作为学校的王牌专业，与你的性格特质和职业规划高度契合，未来发展潜力巨大。",
+    funnyComment: "温馨调侃：选这个专业，以后家里炒菜都不用愁没油啦！别人问你干啥的，直接说'我是挖石油的'，霸气侧漏～",
+    modalDesc: "石油工程是中国石油大学的王牌专业，主要研究石油天然气勘探、开发、储运等工程技术。该专业培养具备扎实的工程基础和实践能力的高级技术人才，就业前景广阔，是能源行业的核心专业。"
+},
+"油气储运工程":{
+    icon: "🚢",
+    type: "能源工程类",
+    desc: "你具备系统思维和全局观念，擅长规划和管理复杂的物流系统。油气储运工程专业培养掌握油气储存、运输和管理技术的高级工程技术人才，在能源物流领域有重要地位。",
+    funnyComment: "温馨调侃：以后全国的油气管道都归你管，真正的'能源快递员'，就是出差可能有点多～",
+    modalDesc: "油气储运工程专业培养具备工程流体力学、物理化学、油气储运工程等方面知识，能在国家与省、市的发展计划部门、交通运输规划与设计部门、油气储运管理部门等从事油气储运工程的规划、勘查设计、施工项目管理和研究、开发等工作的高级工程技术人才。"
+},
+"海洋油气工程":{
+    icon: "🌊",
+    type: "能源工程类",
+    desc: "你勇于挑战，对海洋资源开发有浓厚兴趣，具备海洋工程和石油工程的复合知识结构。海洋油气工程专业专注于海上油气资源的勘探开发，是极具发展潜力的新兴专业。",
+    funnyComment: "温馨调侃：以后上班地点在海上平台，朋友圈定位都与众不同，就是要做好防晒哦～",
+    modalDesc: "海洋油气工程专业培养具备海洋油气工程设计、施工、管理的基本知识和技能，能在海洋油气工程领域从事设计、施工、生产管理和科学研究等工作的高级工程技术人才。"
+},
+"碳储科学与工程":{
+    icon: "🌍",
+    type: "新能源类",
+    desc: "你关注碳中和与可持续发展，具备前沿的环保理念和工程技术能力。碳储科学与工程专业是应对气候变化的新兴交叉学科，未来发展前景广阔。",
+    funnyComment: "温馨调侃：地球的'碳管家'就是你！以后吹牛可以说'我在帮地球降温'，格局直接拉满～",
+    modalDesc: "碳储科学与工程专业培养掌握碳捕集、利用与封存技术的基本理论和工程应用技能，能在碳储相关领域从事技术研发、工程设计、项目管理等工作的高级专门人才。"
+},
+"资源勘查工程":{
+    icon: "🔍",
+    type: "地质工程类",
+    desc: "你充满探索精神，对地球资源有强烈的好奇心，具备扎实的地质理论基础。资源勘查工程专业培养能从事矿产资源勘查、评价和管理的高级技术人才。",
+    funnyComment: "温馨调侃：现代版'摸金校尉'，出门必带地质锤，朋友圈全是山川河流，就是晒得有点黑～",
+    modalDesc: "资源勘查工程专业培养具备地质学、矿产勘查学及矿产经济学的基础理论、基本知识和技能，能在资源勘查、开发(开采)与管理等领域从事固体、液体、气体矿产资源勘查、评价和管理等方面工作的高级工程技术人才。"
+},
+"勘查技术与工程":{
+    icon: "📡",
+    type: "地质工程类",
+    desc: "你擅长运用现代技术手段解决地质问题，具备工程物探和勘查技术的专业能力。勘查技术与工程专业培养能从事地球物理勘探和地质工程勘查的高级技术人才。",
+    funnyComment: "温馨调侃：地球的'CT医生'，能看穿地下几千米，朋友都想让你帮忙找宝藏～",
+    modalDesc: "勘查技术与工程专业培养具备地质学、应用地球物理学、水文地质学、工程地质学、勘查技术与工程等方面的基本理论知识，能在资源勘查、工程勘察、管理等单位从事各类资源勘查与评价、管理及工程勘察、设计、施工与监理等方面工作的高级工程技术人才。"
+},
+"地球物理学":{
+    icon: "🌐",
+    type: "地质科学类",
+    desc: "你对地球物理场和地球内部结构有浓厚兴趣，具备数理基础和数据分析能力。地球物理学专业培养能从事地球物理勘探和研究的高级专门人才。",
+    funnyComment: "温馨调侃：地球的'听诊器'，能听到地球的心跳，就是经常要和地震波打交道～",
+    modalDesc: "地球物理学专业培养具备坚实的数理基础和较系统的地球物理学基本理论、基本知识和基本技能，受到基础研究和应用基础研究的基本训练，具有较好的科学素养及初步的教学、研究能力，能在科研机构、高等学校或相关的技术和行政部门从事科研、教学、技术开发和管理工作的高级专门人才。"
+},
+"化学工程与工艺":{
+    icon: "🧪",
+    type: "化工材料类",
+    desc: "你对化学实验和工艺流程有浓厚兴趣，具备严谨的科学态度和实验精神。化工专业适合你的科研特质，在能源化工领域有很好的发展前景。",
+    funnyComment: "温馨调侃：以后做饭调料随便配，实验精神拉满！朋友都说你是'当代炼金术士'，就是实验室的味道有点上头～",
+    modalDesc: "化学工程与工艺专业培养具备化学工程与化学工艺方面的知识，能在化工、炼油、冶金、能源、轻工、医药、环保和军工等部门从事工程设计、技术开发、生产技术管理和科学研究等方面工作的工程技术人才。"
+},
+"能源化学工程":{
+    icon: "⚗️",
+    type: "化工材料类",
+    desc: "你专注于能源转化和清洁利用，具备化学工程和能源科学的复合知识。能源化学工程专业培养能从事能源化工技术开发和应用的高级工程技术人才。",
+    funnyComment: "温馨调侃：能源界的'化学家'，能把石头变成能源，以后再也不用担心能源危机了～",
+    modalDesc: "能源化学工程专业培养掌握化学和能源转化与利用的基本理论、基本知识和基本技能，能在能源化工领域从事工程设计、技术开发、生产管理和科学研究等工作的高级工程技术人才。"
+},
+"环境工程":{
+    icon: "🌱",
+    type: "环境科学类",
+    desc: "你关注环保和可持续发展，具备社会责任感和系统思维能力。环境工程专业与你的价值观高度契合，在绿色能源和环境保护领域有重要发展空间。",
+    funnyComment: "温馨调侃：地球的守护者就是你！以后出门看见垃圾都忍不住捡，朋友都叫你'环保小卫士'，功德+10086～",
+    modalDesc: "环境工程专业培养具备城市和现代工业环境保护方面的水、气、声、固体废物污染防治、环境规划、资源保护、环境影响评价等方面的基础知识，能够在环保部门、工矿企业、科研单位、火力发电厂等从事规划、设计、管理和研究开发工作的高级应用型人才。"
+},
+"机械类":{
+    icon: "⚙️",
+    type: "机械工程类",
+    desc: "你动手能力强，喜欢拆解和分析机械结构，具备优秀的空间想象能力。机械类专业与你的实践特质高度匹配，适合从事工程设计、制造等相关工作。",
+    funnyComment: "温馨调侃：从此成为'机械侠'，家里的家电坏了都不用找维修师傅，自己上手就搞定，省钱又拉风～",
+    modalDesc: "机械类专业培养具备机械设计、制造、自动化等方面的基础知识与应用能力，能在工业生产第一线从事机械工程及自动化领域内的设计制造、科技开发、应用研究、运行管理和经营销售等方面工作的高级工程技术人才。"
+},
+"过程装备与控制工程":{
+    icon: "🔧",
+    type: "机械工程类",
+    desc: "你擅长将机械工程与控制技术相结合，具备过程装备设计和系统控制的专业能力。该专业培养能从事过程装备设计、制造和控制的高级工程技术人才。",
+    funnyComment: "温馨调侃：工厂的'设备管家'，所有机器见了你都得乖乖听话，就是要经常和管道阀门打交道～",
+    modalDesc: "过程装备与控制工程专业培养具备化学工程、机械工程、控制工程和管理工程等方面的知识，能在化工、石油、能源、轻工、环保、医药、食品、机械及劳动安全等部门从事工程设计、技术开发、生产技术、经营管理以及工程科学研究等方面工作的高级工程技术人才。"
+},
+"能源与动力工程":{
+    icon: "🔥",
+    type: "能源动力类",
+    desc: "你对能源转换和动力系统有浓厚兴趣，具备热学和力学的扎实基础。能源与动力工程专业培养能从事能源高效利用和动力系统设计的高级技术人才。",
+    funnyComment: "温馨调侃：能源界的'发动机'，能让所有设备转起来，就是夏天在锅炉房有点热～",
+    modalDesc: "能源与动力工程专业培养具备能源工程、传热学、流体力学、热力学、动力机械、动力系统等方面的基础知识，能在能源、动力、制冷、空调、环保等领域从事设计、制造、运行、管理、研究开发等工作的高级工程技术人才。"
+},
+"安全工程":{
+    icon: "🛡️",
+    type: "安全科学类",
+    desc: "你具备强烈的安全意识和风险管控能力，擅长识别和防范工程安全隐患。安全工程专业培养能从事安全管理和风险评估的高级专门人才。",
+    funnyComment: "温馨调侃：工地上的'守护神'，所有安全隐患都逃不过你的眼睛，就是责任有点大～",
+    modalDesc: "安全工程专业培养具备安全科学与工程、公共安全管理、应急管理等方面的知识和能力，能在矿山、建筑、石油、化工、能源、消防等行业和领域从事安全科学研究、安全技术开发、安全工程设计、安全检测与监控、安全管理等工作的高素质复合型工程技术人才。"
+},
+"材料科学与工程":{
+    icon: "🧱",
+    type: "材料工程类",
+    desc: "你对材料性能和新材料研发有浓厚兴趣，具备实验精神和创新思维。材料专业适合你的科研特质，在能源材料和新材料领域有重要发展潜力。",
+    funnyComment: "温馨调侃：别人逛街看衣服，你逛街看材质！以后买东西先分析材料成分，朋友都嫌你太较真，但都偷偷请教你～",
+    modalDesc: "材料科学与工程专业培养具备包括金属材料、无机非金属材料、高分子材料等材料领域的科学与工程方面较宽的基础知识，能在各种材料的制备、加工成型、材料结构与性能等领域从事科学研究与教学、技术开发、工艺和设备设计、技术改造及经营管理等方面工作，适应社会主义市场经济发展的高层次、高素质全面发展的科学研究与工程技术人才。"
+},
+"新能源科学与工程":{
+    icon: "☀️",
+    type: "新能源类",
+    desc: "你关注新能源技术和可持续发展，具备创新意识和跨学科思维。新能源科学与工程专业培养能从事新能源开发和应用的高级技术人才。",
+    funnyComment: "温馨调侃：未来的'能源大亨'，太阳能、风能都是你的菜，以后再也不用愁电费了～",
+    modalDesc: "新能源科学与工程专业培养具备新能源科学与工程领域的基本理论和工程技术知识，能在新能源领域从事科学研究、技术开发、工程设计、生产管理等工作的高级工程技术人才。"
+},
+"储能科学与工程":{
+    icon: "🔋",
+    type: "新能源类",
+    desc: "你专注于能源储存和高效利用，具备电化学和材料科学的复合知识。储能科学与工程专业是应对能源转型的新兴专业，发展前景广阔。",
+    funnyComment: "温馨调侃：能源界的'充电宝'，能把电存起来慢慢用，以后停电都不怕了～",
+    modalDesc: "储能科学与工程专业培养掌握储能科学与工程的基本理论、基本知识和基本技能，能在储能材料、储能器件、储能系统等领域从事科学研究、技术开发、工程设计、生产管理等工作的高级工程技术人才。"
+},
+"电子信息工程":{
+    icon: "📱",
+    type: "电子信息类",
+    desc: "你对电子技术和信息处理有浓厚兴趣，具备电路设计和信号分析的专业能力。电子信息工程专业培养能从事电子系统设计和信息处理的高级技术人才。",
+    funnyComment: "温馨调侃：电子产品的'主治医师'，手机电脑坏了都能修，朋友都排队找你帮忙～",
+    modalDesc: "电子信息工程专业培养具备电子技术和信息系统的基础知识，能从事各类电子设备和信息系统的研究、设计、制造、应用和开发的高等工程技术人才。"
+},
+"自动化":{
+    icon: "🤖",
+    type: "控制工程类",
+    desc: "你对自动化系统和智能控制有浓厚兴趣，具备逻辑思维和系统设计能力。自动化专业适合你的技术特质，在工业自动化和智能控制领域有很好的发展前景。",
+    funnyComment: "温馨调侃：梦想是让所有事情都自动化，包括吃饭睡觉打游戏！以后家里全是智能设备，躺着就能掌控一切～",
+    modalDesc: "自动化专业培养具备电工技术、电子技术、控制理论、自动检测与仪表、信息处理、系统工程、计算机技术与应用和网络技术等较宽广领域的工程技术基础和一定的专业知识，能在运动控制、工业过程控制、电力电子技术、检测与自动化仪表、电子与计算机技术、信息处理、管理与决策等领域从事系统分析、系统设计、系统运行、科技开发及研究等方面工作的高级工程技术人才。"
+},
+"计算机科学与技术":{
+    icon: "💻",
+    type: "信息技术类",
+    desc: "你具备出色的逻辑思维和编程能力，对新技术有强烈的好奇心和学习欲望。计算机专业适合你的创新思维和解决复杂问题的能力，未来在IT行业有广阔的发展空间。",
+    funnyComment: "温馨调侃：恭喜喜提'程序员'体验卡！以后头发可能会离家出走，但薪资会带你走向人生巅峰～",
+    modalDesc: "计算机科学与技术专业培养具备计算机科学与技术的基本理论、基本知识和基本技能，能在科研部门、教育单位、企业、事业、技术和行政管理部门等单位从事计算机教学、科学研究和应用的计算机科学与技术学科的高级专门科学技术人才。"
+},
+"人工智能":{
+    icon: "🧠",
+    type: "信息技术类",
+    desc: "你对人工智能和机器学习有浓厚兴趣，具备算法设计和数据建模的专业能力。人工智能专业是前沿交叉学科，未来发展潜力巨大。",
+    funnyComment: "温馨调侃：未来的'AI大佬'，能让机器像人一样思考，就是要和大量数据打交道～",
+    modalDesc: "人工智能专业培养具备人工智能的基本理论、方法和技能，能在人工智能领域从事研究、开发、应用和管理的高级专门人才。"
+},
+"数据科学与大数据技术":{
+    icon: "📊",
+    type: "信息技术类",
+    desc: "你擅长数据挖掘和分析，具备统计学和计算机科学的复合知识。数据科学与大数据技术专业培养能从事大数据分析和应用的高级技术人才。",
+    funnyComment: "温馨调侃：数据界的'福尔摩斯'，能从海量数据中发现规律，就是经常要和Excel、Python打交道～",
+    modalDesc: "数据科学与大数据技术专业培养具备数据科学与大数据技术的基本理论、方法和技能，能在互联网、金融、能源等领域从事大数据分析、挖掘、处理、应用和管理的高级专门人才。"
+},
+"数学与应用数学":{
+    icon: "📐",
+    type: "数学类",
+    desc: "你具备扎实的数学基础和逻辑思维能力，擅长运用数学方法解决实际问题。数学与应用数学专业培养能从事数学研究和应用的高级专门人才。",
+    funnyComment: "温馨调侃：行走的'计算器'，买菜算账从不用手机，朋友都叫你'数学大神'～",
+    modalDesc: "数学与应用数学专业培养掌握数学科学的基本理论与基本方法，具备运用数学知识、使用计算机解决实际问题的能力，受到科学研究的初步训练，能在科技、教育和经济部门从事研究、教学工作或在生产经营及管理部门从事实际应用、开发研究和管理工作的高级专门人才。"
+},
+"应用化学":{
+    icon: "🔬",
+    type: "化学类",
+    desc: "你对化学应用和实验技术有浓厚兴趣，具备扎实的化学基础和实验技能。应用化学专业培养能从事化学应用研究和技术开发的高级专门人才。",
+    funnyComment: "温馨调侃：实验室的'魔法师'，能把普通物质变成有用的产品，就是要小心各种试剂～",
+    modalDesc: "应用化学专业培养具备化学的基本理论、基本知识和较强的实验技能，能在科研机构、高等学校及企事业单位等从事科学研究、教学工作及管理工作的高级专门人才。"
+},
+"金融学":{
+    icon: "💹",
+    type: "经济管理类",
+    desc: "你具备敏锐的经济洞察力和风险意识，擅长金融分析和投资决策。金融学专业培养能从事金融分析和管理的高级专门人才。",
+    funnyComment: "温馨调侃：未来的'金融大鳄'，看K线图比看电视剧还入迷，就是要承受市场波动的压力～",
+    modalDesc: "金融学专业培养具备金融学方面的理论知识和业务技能，能在银行、证券、投资、保险及其他经济管理部门和企业从事相关工作的专门人才。"
+},
+"能源经济":{
+    icon: "💰",
+    type: "经济管理类",
+    desc: "你兼具经济思维和能源行业视野，擅长分析市场趋势和商业决策。能源经济专业结合了你的经济头脑和能源行业兴趣，是复合型人才的优质选择。",
+    funnyComment: "温馨调侃：别人还在算零花钱，你已经开始分析能源市场了！以后聚会就是你的财经讲座专场，倍儿有面～",
+    modalDesc: "能源经济专业培养具备扎实的经济学和管理学理论基础，掌握能源经济运行规律和能源政策法规，能在能源企业、政府部门、研究机构等单位从事能源经济分析、能源政策研究、能源管理等工作的高级专门人才。"
+},
+"工商管理类":{
+    icon: "📋",
+    type: "管理类",
+    desc: "你具备出色的管理能力和组织协调能力，擅长企业运营和团队管理。工商管理类专业培养能从事企业管理和运营的高级管理人才。",
+    funnyComment: "温馨调侃：未来的'CEO'，天生的领导者，开会发言头头是道，就是要处理各种人际关系～",
+    modalDesc: "工商管理类专业培养具备管理、经济、法律及企业管理方面的知识和能力，能在企、事业单位及政府部门从事管理以及教学、科研方面工作的工商管理学科高级专门人才。"
+},
+"信息管理与信息系统":{
+    icon: "📈",
+    type: "管理科学与工程类",
+    desc: "你擅长将信息技术与管理科学相结合，具备信息系统设计和管理的专业能力。该专业培养能从事信息管理和系统开发的高级复合型人才。",
+    funnyComment: "温馨调侃：公司的'信息管家'，能把杂乱的数据变成有用的信息，就是经常要加班改需求～",
+    modalDesc: "信息管理与信息系统专业培养具备现代管理学理论基础、计算机科学技术知识及应用能力，掌握系统思想和信息系统分析与设计方法以及信息管理等方面的知识和能力，能在国家各级管理部门、工商企业、金融机构、科研单位等部门从事信息管理以及信息系统分析、设计、实施管理和评价等方面的高级专门人才。"
+},
+"英语":{
+    icon: "🗣️",
+    type: "外国语言文学类",
+    desc: "你具备出色的语言天赋和跨文化交流能力，擅长英语翻译和国际沟通。英语专业培养能从事翻译、教育和国际交流的高级专门人才。",
+    funnyComment: "温馨调侃：行走的'翻译官'，看美剧不用字幕，和外国人交流毫无压力，就是要背很多单词～",
+    modalDesc: "英语专业培养具有扎实的英语语言基础和比较广泛的科学文化知识，能在外事、经贸、文化、新闻出版、教育、科研、旅游等部门从事翻译、研究、教学、管理工作的英语高级专门人才。"
+},
+"思想政治教育":{
+    icon: "📚",
+    type: "马克思主义理论类",
+    desc: "你具备坚定的政治立场和理论素养，擅长思想教育和理论宣传。思想政治教育专业培养能从事思想政治教育和管理的高级专门人才。",
+    funnyComment: "温馨调侃：行走的'思想导师'，总能给朋友讲人生道理，就是说话太有哲理别人听不懂～",
+    modalDesc: "思想政治教育专业培养具备马克思主义基本理论和思想政治教育专业知识，能在党政机关、学校、企事业单位从事思想政治工作的专门人才。"
+}
+};
+/* ===== 专业评分规则 ===== */
+const majors = {
+"石油工程":[0,5,9,28],
+"油气储运工程":[0,20,34],
+"海洋油气工程":[4,34],
+"碳储科学与工程":[20,31],
+"资源勘查工程":[14,31],
+"勘查技术与工程":[14,37],
+"地球物理学":[31,37],
+"化学工程与工艺":[31,25],
+"能源化学工程":[20,31],
+"环境工程":[20,29],
+"机械类":[1,18,38],
+"过程装备与控制工程":[18,32],
+"能源与动力工程":[20,31],
+"安全工程":[5,29],
+"材料科学与工程":[31],
+"新能源科学与工程":[20],
+"储能科学与工程":[20],
+"电子信息工程":[2,33],
+"自动化":[10,32],
+"计算机科学与技术":[2,16,24],
+"人工智能":[24,27],
+"数据科学与大数据技术":[33],
+"数学与应用数学":[21,37],
+"应用化学":[31],
+"金融学":[3,19],
+"能源经济":[3,20],
+"工商管理类":[12,26],
+"信息管理与信息系统":[33],
+"英语":[6],
+"思想政治教育":[16]
+};
+/* ===== 全局变量 ===== */
+let currentQuestions = [];
+let answers = [];
+let currentIndex = 0;
+let testVersion = 'full';
+/* ===== 页面控制函数 ===== */
+function goBack() {
+    // 🌟 核心修改：修复返回按钮逻辑，确保回到初始封面页
+    // 1. 隐藏所有页面
+    document.getElementById('test').style.display = 'none';
+    document.getElementById('resultPage').style.display = 'none';
+    // 2. 显示封面页（初始界面）
+    document.getElementById('cover').style.display = 'block';
+    // 3. 关闭所有弹窗（防止弹窗遮挡）
+    document.getElementById('majorModal').style.display = 'none';
+    document.getElementById('fullGalleryModal').style.display = 'none';
+    // 4. 重置测试状态（可选，让用户重新开始测试）
+    currentIndex = 0;
+    answers = [];
+}
+function startTest(version) {
+    testVersion = version;
+    // 选择对应版本的题目
+    currentQuestions = version === 'simple' ? [...simpleQuestions] : [...fullQuestions];
+    
+    // 重置状态
+    answers = Array(currentQuestions.length).fill(undefined);
+    currentIndex = 0;
+    
+    // 切换页面
+    document.getElementById('cover').style.display = 'none';
+    document.getElementById('test').style.display = 'block'; // 修改为display:block，保持样式统一
+    
+    // 渲染第一题
+    renderQuestion();
+}
+function renderQuestion() {
+    // 更新题目内容
+    document.getElementById('questionText').innerText = currentQuestions[currentIndex];
+    
+    // 更新进度
+    const progress = (currentIndex / currentQuestions.length) * 100;
+    document.getElementById('progressFill').style.width = `${progress}%`;
+    document.getElementById('progressText').innerText = `第 ${currentIndex+1} / ${currentQuestions.length} 题`;
+    
+    // 重置选项状态
+    const options = document.querySelectorAll('.answer-option');
+    options.forEach(option => option.classList.remove('selected'));
+    
+    // 如果有已选答案，设置选中状态
+    if (answers[currentIndex] !== undefined) {
+        const radios = document.querySelectorAll(`input[name="ans"][value="${answers[currentIndex]}"]`);
+        if (radios.length > 0) {
+            radios[0].checked = true;
+            radios[0].closest('.answer-option').classList.add('selected');
+        }
+    }
+    
+    // 控制按钮状态
+    document.getElementById('prevBtn').disabled = currentIndex === 0;
+    document.getElementById('submitBtn').style.display = currentIndex === currentQuestions.length - 1 ? 'inline-block' : 'none';
+    document.getElementById('nextBtn').style.display = currentIndex === currentQuestions.length - 1 ? 'none' : 'inline-block';
+}
+// 选项点击事件
+document.querySelectorAll('.answer-option').forEach(option => {
+    option.addEventListener('click', function() {
+        // 移除所有选中状态
+        document.querySelectorAll('.answer-option').forEach(opt => opt.classList.remove('selected'));
+        // 添加当前选中状态
+        this.classList.add('selected');
+        // 获取选中值
+        const value = this.querySelector('input').value;
+        answers[currentIndex] = value;
+    });
+});
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion();
+    }
+}
+function nextQuestion() {
+    // 检查是否选择了答案
+    if (answers[currentIndex] === undefined) {
+        alert("请选择一个答案！");
+        return;
+    }
+    
+    if (currentIndex < currentQuestions.length - 1) {
+        currentIndex++;
+        renderQuestion();
+    }
+}
+function submitTest() {
+    // 检查是否完成所有题目
+    const unfinished = answers.some(item => item === undefined);
+    if (unfinished || answers.length < currentQuestions.length) {
+        alert("请完成所有题目再提交！");
+        return;
+    }
+    // 计算专业得分
+    let scores = {};
+    Object.keys(majors).forEach(k => scores[k] = 0);
+    
+    for (let major in majors) {
+        majors[major].forEach(questionIndex => {
+            if (questionIndex < answers.length) {
+                scores[major] += parseInt(answers[questionIndex] || 0);
+            }
+        });
+    }
+    // 排序获取TOP1专业
+    let sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+    let top1 = sorted[0][0];
+    
+    // 如果没有匹配到详细数据，用默认值
+    const majorData = allMajorsData[top1] || allMajorsData['石油工程'];
+    
+    // 更新结果页面内容
+    document.getElementById('resultIcon').innerHTML = majorData.icon;
+    document.getElementById('resultMajor').innerText = top1;
+    document.getElementById('majorType').innerText = majorData.type;
+    document.getElementById('majorAnalysis').innerText = majorData.desc;
+    // 新增：更新搞笑调侃内容
+    document.getElementById('funnyComment').innerText = majorData.funnyComment;
+    
+    // 更新测试信息
+    document.getElementById('testVersion').innerText = testVersion === 'simple' ? '简约版' : '完整版';
+    document.getElementById('completeTime').innerText = new Date().toLocaleString();
+    document.getElementById('questionCount').innerText = `${currentQuestions.length}题`;
+    
+    // 切换到结果页面
+    document.getElementById('test').style.display = 'none';
+    document.getElementById('resultPage').style.display = 'block';
+}
+/* ===== 专业图鉴弹窗 - 核心修改：优化显示逻辑确保最顶层 ===== */
+function showMajorDetail(majorName) {
+    const data = allMajorsData[majorName] || allMajorsData['石油工程'];
+    
+    document.getElementById('modalIcon').innerHTML = data.icon;
+    document.getElementById('modalName').innerText = majorName;
+    document.getElementById('modalDesc').innerText = data.modalDesc;
+    
+    // 核心优化：显示前先关闭完整图鉴弹窗，确保专业详情弹窗单独显示在最顶层
+    document.getElementById('fullGalleryModal').style.display = 'none';
+    // 显示专业详情弹窗
+    const modal = document.getElementById('majorModal');
+    modal.style.display = 'flex';
+    // 强制提升层级（兜底保障）
+    modal.style.zIndex = '9999';
+}
+function closeModal() {
+    document.getElementById('majorModal').style.display = 'none';
+}
+// 点击弹窗外区域关闭
+document.getElementById('majorModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeModal();
+    }
+});
+/* ===== 完整专业图鉴功能 ===== */
+function showFullGallery() {
+    const galleryGrid = document.getElementById('fullGalleryGrid');
+    galleryGrid.innerHTML = '';
+    
+    // 遍历所有专业，生成完整图鉴
+    Object.keys(allMajorsData).forEach(majorName => {
+        const majorData = allMajorsData[majorName];
+        const majorItem = document.createElement('div');
+        majorItem.className = 'major-item';
+        majorItem.onclick = () => showMajorDetail(majorName);
+        majorItem.innerHTML = `
+            <div class="major-icon">${majorData.icon}</div>
+            <div class="major-name">${majorName}</div>
+        `;
+        galleryGrid.appendChild(majorItem);
+    });
+    
+    // 显示完整图鉴弹窗
+    const fullGalleryModal = document.getElementById('fullGalleryModal');
+    fullGalleryModal.style.display = 'flex';
+    // 确保完整图鉴弹窗层级正确
+    fullGalleryModal.style.zIndex = '9998';
+}
+function closeFullGallery() {
+    document.getElementById('fullGalleryModal').style.display = 'none';
+}
+// 点击弹窗外区域关闭完整图鉴
+document.getElementById('fullGalleryModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeFullGallery();
+    }
+});
+</script>
+</body>
+</html># -
