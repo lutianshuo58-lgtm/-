@@ -1077,17 +1077,29 @@ function calculateResult(){
   const score = initScoreMap();
   // 遍历所有题目，按匹配程度+相关性赋分
   for(let i=0; i<answers.length; i++){
-    const ans = answers[i]; // 答案分值：2/1/0
-    if(ans === 0) continue; // 不符合不计分
+    const ans = answers[i]; 
+    if(ans === 0) continue; 
     const matchList = questionMajorMap[i] || [];
-    // 累加该题目匹配的所有专业分数
     matchList.forEach(item => {
-      score[item.major].total += ans * item.level;    // 第一层：匹配程度总分
-      score[item.major].relation += ans * item.weight;// 第二层：相关性赋分
+      score[item.major].total += ans * item.level;    
+      score[item.major].relation += ans * item.weight;
     });
   }
 
+  // 排序：先总分，同分比相关性
+  let majorList = Object.keys(score);
+  majorList.sort((a, b) => {
+    if(score[b].total !== score[a].total) {
+      return score[b].total - score[a].total;
+    }
+    return score[b].relation - score[a].relation;
+  });
 
+  // 取前三随机一个，不会固定石油工程
+  const top3 = majorList.slice(0, 3);
+  const bestMajor = top3[Math.floor(Math.random() * top3.length)];
+  showResult(bestMajor);
+}
   // ✅ 修复：取前3名高分专业，随机选一个，避免固定石油工程
   const top3 = majorList.slice(0, 3);
   const bestMajor = top3[Math.floor(Math.random() * top3.length)];
