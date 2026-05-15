@@ -274,6 +274,8 @@ body{
     border-color: #eee;
     cursor: not-allowed;
 }
+
+/* ========== 修复：弹窗层级（关键修改） ========== */
 .result-modal{
     position: fixed;
     top: 0;
@@ -284,10 +286,19 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 99999;
+    z-index: 9999; /* 完整图鉴在下层 */
     padding: 20px;
     pointer-events: auto;
 }
+/* 专业详情弹窗 最上层 */
+#majorModal {
+    z-index: 10000 !important;
+}
+/* 分享/历史 最最上层 */
+#sharePosterModal, #historyModal {
+    z-index: 10001 !important;
+}
+
 .modal-content{
     background: white;
     border-radius: 16px;
@@ -298,7 +309,7 @@ body{
     padding: 30px;
     position: relative;
     animation: fadeIn 0.4s ease;
-    z-index: 10000;
+    z-index: inherit;
 }
 .full-gallery-modal .modal-content {
     max-width: 800px;
@@ -329,7 +340,7 @@ body{
     font-size: 20px;
     color: #999;
     cursor: pointer;
-    z-index: 10001;
+    z-index: 10002;
 }
 .result-page{
     padding: 20px;
