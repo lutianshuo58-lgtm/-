@@ -639,8 +639,8 @@ body{
             <div class="major-type" id="majorType">能源工程类</div>
             
             <div class="result-btn-group">
-                <button class="result-btn primary">分享结果</button>
-                <button class="result-btn secondary">查看历史</button>
+                <button class="result-btn primary" onclick="shareResult()">分享结果</button>
+<button class="result-btn secondary" onclick="viewHistory()">查看历史</button>
             </div>
         </div>
         <div class="result-section">
@@ -1065,7 +1065,7 @@ let testVersion = 'full';
 /* ===== 页面控制函数 ===== */
 function goBack() {
     // 🌟 核心修改：修复返回按钮逻辑，确保回到初始封面页
-    // 1. 隐藏所有页面
+  // 1. 隐藏所有页面
     document.getElementById('test').style.display = 'none';
     document.getElementById('resultPage').style.display = 'none';
     // 2. 显示封面页（初始界面）
