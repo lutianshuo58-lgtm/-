@@ -1149,8 +1149,7 @@ function nextQuestion() {
         currentIndex++;
         renderQuestion();
     }
-}
-function submitTest() {
+}function submitTest() {
     // 检查是否完成所有题目
     const unfinished = answers.some(item => item === undefined);
     if (unfinished || answers.length < currentQuestions.length) {
@@ -1187,6 +1186,9 @@ function submitTest() {
     document.getElementById('testVersion').innerText = testVersion === 'simple' ? '简约版' : '完整版';
     document.getElementById('completeTime').innerText = new Date().toLocaleString();
     document.getElementById('questionCount').innerText = `${currentQuestions.length}题`;
+
+    // 就这里！加了这一行保存历史
+    saveHistory(top1);
     
     // 切换到结果页面
     document.getElementById('test').style.display = 'none';
