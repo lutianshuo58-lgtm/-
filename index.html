@@ -1087,14 +1087,6 @@ function calculateResult(){
     });
   }
 
-  // 排序规则：先比匹配总分 → 总分相同比相关性分
-  let majorList = Object.keys(score);
-  majorList.sort((a, b) => {
-    if(score[b].total !== score[a].total) {
-      return score[b].total - score[a].total;
-    }
-    return score[b].relation - score[a].relation;
-  });
 
   // ✅ 修复：取前3名高分专业，随机选一个，避免固定石油工程
   const top3 = majorList.slice(0, 3);
