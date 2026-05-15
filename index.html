@@ -1251,44 +1251,65 @@ document.getElementById('fullGalleryModal').addEventListener('click', function(e
     }
 });
  // 分享结果功能
+// 分享结果 修复版
 function shareResult() {
-  let major = document.getElementById("resultMajor").innerText;
-  let type = document.getElementById("majorType").innerText;
-  let text = "🧪 中国石油大学专业匹配测试\n我测出最适合的专业是：" + major + "（" + type + "）\n快来测测你适合什么专业！";
+    let major = document.getElementById("resultMajor").innerText;
+    let type = document.getElementById("majorType").innerText;
+    let content = `中国石油大学专业匹配测试\n我匹配到的专业：${major}【${type}】\n快来测测你适合哪个专业！`;
 
-  if (navigator.share) {
-    navigator.share({
-      title: "专业匹配测试",
-      text: text,
-      url: window.location.href
-    });
-  } else {
-    alert(text + "\n\n（分享功能已复制文案，可直接粘贴发送）");
-  }
+    // 优先系统分享
+    if (navigator.share && location.protocol === 'https:') {
+        navigator.share({
+            title: '专业匹配测试',
+            text: content,
+            url: window.location.href
+        }).catch(() => {
+            // 分享失败就弹窗复制文案
+            alert(content + "\n已复制文案，直接去微信/QQ粘贴即可");
+        });
+    } else {
+        // 非HTTPS/微信浏览器 直接弹文案
+        alert(content + "\n已整理好文案，复制去分享就行");
+    }
 }
 
-// 查看历史功能
+// 查看历史 修复版
 function viewHistory() {
-  let history = JSON.parse(localStorage.getItem("majorTestHistory") || "[]");
-  if (history.length === 0) {
-    alert("暂无测试历史～先测一次吧！");
-    return;
-  }
-  let msg = "📜 最近测试历史：\n";
-  history.forEach((item, index) => {
-    msg += (index+1) + "、" + item.major + " - " + item.time + "\n";
-  });
-  alert(msg);
+    let list = [];
+    try {
+        list = JSON.parse(localStorage.getItem("majorTestHistory") || "[]");
+    } catch (e) {
+        list = [];
+    }
+
+    if (list.length === 0) {
+        alert("暂无测试历史记录");
+        return;
+    }
+
+    let tip = "📜 测试历史记录：\n";
+    list.forEach((item, idx) => {
+        tip += `${idx + 1}. ${item.major} | ${item.time}\n`;
+    });
+    alert(tip);
 }
 
-// 提交结果时自动保存历史
+// 保存历史 修复版
 function saveHistory(major) {
-  let history = JSON.parse(localStorage.getItem("majorTestHistory") || "[]");
-  let now = new Date().toLocaleString();
-  history.unshift({ major: major, time: now });
-  if (history.length > 5) history = history.slice(0, 5);
-  localStorage.setItem("majorTestHistory", JSON.stringify(history));
-} 
+    let list = [];
+    try {
+        list = JSON.parse(localStorage.getItem("majorTestHistory") || "[]");
+    } catch (e) {
+        list = [];
+    }
+    list.unshift({
+        major: major,
+        time: new Date().toLocaleString()
+    });
+    // 只保留最近5条
+    if (list.length > 5) list = list.slice(0, 5);
+    localStorage.setItem("majorTestHistory", JSON.stringify(list));
+}
 </script>
 </body>
 </html>
