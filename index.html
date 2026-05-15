@@ -823,138 +823,352 @@ const allMajorsData = {
 "信息管理与信息系统":{icon:"📈",type:"管理科学与工程类",desc:"你擅长将信息技术与管理科学相结合，具备信息系统设计和管理的专业能力。该专业培养能从事信息系统规划、开发与管理的复合型人才。",funnyComment:"温馨调侃：企业信息的'大管家'，既能写代码又能管项目，妥妥的全能选手～",modalDesc:"信息管理与信息系统融合计算机技术与管理知识，可从事信息系统开发、数据管理、企业信息化建设的复合型人才。",traits:["信息整合","技术管理","系统规划","跨界能力"],dim:{eng:7,research:7,practice:8,match:9}}
 };
 
+// ====================== 核心新增：题目-专业匹配权重库（每道题5-6个专业） ======================
+// level = 匹配程度（1-3，越高越匹配）
+// weight = 相关性赋分（1-5，越高相关性越强）
+const questionMajorMap = {
+  0: [ // 我喜欢研究能源相关的新鲜事
+    {major:"石油工程",level:3,weight:5},
+    {major:"新能源科学与工程",level:3,weight:5},
+    {major:"能源经济",level:2,weight:4},
+    {major:"油气储运工程",level:2,weight:4},
+    {major:"碳储科学与工程",level:2,weight:3},
+    {major:"能源与动力工程",level:1,weight:2}
+  ],
+  1: [ // 我愿意去现场解决真实问题
+    {major:"石油工程",level:1,weight:3},
+    {major:"资源勘查工程",level:3,weight:5},
+    {major:"安全工程",level:2,weight:4},
+    {major:"机械类",level:2,weight:4},
+    {major:"勘查技术与工程",level:2,weight:3},
+    {major:"环境工程",level:1,weight:2}
+  ],
+  2: [ // 我关心环保、碳中和、绿色未来
+    {major:"环境工程",level:3,weight:5},
+    {major:"碳储科学与工程",level:3,weight:5},
+    {major:"新能源科学与工程",level:2,weight:4},
+    {major:"能源化学工程",level:2,weight:4},
+    {major:"材料科学与工程",level:2,weight:3},
+    {major:"应用化学",level:1,weight:2}
+  ],
+  3: [ // 我喜欢拆东西、修东西、摆弄机械
+    {major:"机械类",level:3,weight:5},
+    {major:"过程装备与控制工程",level:3,weight:5},
+    {major:"自动化",level:2,weight:4},
+    {major:"电子信息工程",level:2,weight:4},
+    {major:"能源与动力工程",level:2,weight:3},
+    {major:"石油工程",level:1,weight:2}
+  ],
+  4: [ // 我做实验会很有成就感
+    {major:"化学工程与工艺",level:3,weight:5},
+    {major:"应用化学",level:3,weight:5},
+    {major:"材料科学与工程",level:2,weight:4},
+    {major:"能源化学工程",level:2,weight:4},
+    {major:"地球物理学",level:2,weight:3},
+    {major:"环境工程",level:1,weight:2}
+  ],
+  5: [ // 我遇到问题习惯用逻辑推理
+    {major:"计算机科学与技术",level:3,weight:5},
+    {major:"自动化",level:3,weight:5},
+    {major:"数据科学与大数据技术",level:2,weight:4},
+    {major:"数学与应用数学",level:2,weight:4},
+    {major:"人工智能",level:2,weight:3},
+    {major:"能源经济",level:1,weight:2}
+  ],
+  6: [ // 我喜欢跟数字、数据打交道
+    {major:"数据科学与大数据技术",level:3,weight:5},
+    {major:"能源经济",level:3,weight:5},
+    {major:"金融学",level:2,weight:4},
+    {major:"数学与应用数学",level:2,weight:4},
+    {major:"信息管理与信息系统",level:2,weight:3},
+    {major:"计算机科学与技术",level:1,weight:2}
+  ],
+  7: [ // 我对石油、天然气很感兴趣
+    {major:"石油工程",level:2,weight:3},
+    {major:"油气储运工程",level:3,weight:5},
+    {major:"海洋油气工程",level:2,weight:4},
+    {major:"资源勘查工程",level:2,weight:4},
+    {major:"能源与动力工程",level:2,weight:3},
+    {major:"化学工程与工艺",level:1,weight:2}
+  ],
+  8: [ // 我喜欢设计、做工程项目
+    {major:"石油工程",level:3,weight:5},
+    {major:"机械类",level:3,weight:5},
+    {major:"自动化",level:2,weight:4},
+    {major:"电子信息工程",level:2,weight:4},
+    {major:"过程装备与控制工程",level:2,weight:3},
+    {major:"环境工程",level:1,weight:2}
+  ],
+  9: [ // 我写代码、做小程序会很开心
+    {major:"计算机科学与技术",level:3,weight:5},
+    {major:"人工智能",level:3,weight:5},
+    {major:"自动化",level:2,weight:4},
+    {major:"数据科学与大数据技术",level:2,weight:4},
+    {major:"电子信息工程",level:2,weight:3},
+    {major:"信息管理与信息系统",level:1,weight:2}
+  ],
+  10: [ // 我擅长从数据里找规律
+    {major:"数据科学与大数据技术",level:3,weight:5},
+    {major:"人工智能",level:3,weight:5},
+    {major:"数学与应用数学",level:2,weight:4},
+    {major:"能源经济",level:2,weight:4},
+    {major:"金融学",level:2,weight:3},
+    {major:"计算机科学与技术",level:1,weight:2}
+  ],
+  11: [ // 我喜欢看财经、赚钱相关内容
+    {major:"金融学",level:3,weight:5},
+    {major:"能源经济",level:3,weight:5},
+    {major:"工商管理类",level:2,weight:4},
+    {major:"信息管理与信息系统",level:2,weight:4},
+    {major:"数据科学与大数据技术",level:2,weight:3},
+    {major:"数学与应用数学",level:1,weight:2}
+  ],
+  12: [ // 我天生擅长组织别人、带队
+    {major:"工商管理类",level:3,weight:5},
+    {major:"能源经济",level:3,weight:5},
+    {major:"信息管理与信息系统",level:2,weight:4},
+    {major:"安全工程",level:2,weight:4},
+    {major:"金融学",level:2,weight:3},
+    {major:"石油工程",level:1,weight:2}
+  ],
+  13: [ // 我喜欢钻研难题、搞科研
+    {major:"材料科学与工程",level:3,weight:5},
+    {major:"地球物理学",level:3,weight:5},
+    {major:"人工智能",level:2,weight:4},
+    {major:"数学与应用数学",level:2,weight:4},
+    {major:"碳储科学与工程",level:2,weight:3},
+    {major:"应用化学",level:1,weight:2}
+  ],
+  14: [ // 我能接受出差、跑现场
+    {major:"资源勘查工程",level:3,weight:5},
+    {major:"石油工程",level:3,weight:5},
+    {major:"勘查技术与工程",level:2,weight:4},
+    {major:"海洋油气工程",level:2,weight:4},
+    {major:"安全工程",level:2,weight:3},
+    {major:"环境工程",level:1,weight:2}
+  ],
+  15: [ // 我对新技术特别敏感
+    {major:"人工智能",level:3,weight:5},
+    {major:"新能源科学与工程",level:3,weight:5},
+    {major:"计算机科学与技术",level:2,weight:4},
+    {major:"自动化",level:2,weight:4},
+    {major:"储能科学与工程",level:2,weight:3},
+    {major:"电子信息工程",level:1,weight:2}
+  ],
+  16: [ // 我做事认真、细致、不马虎
+    {major:"安全工程",level:3,weight:5},
+    {major:"化学工程与工艺",level:3,weight:5},
+    {major:"应用化学",level:2,weight:4},
+    {major:"材料科学与工程",level:2,weight:4},
+    {major:"数据科学与大数据技术",level:2,weight:3},
+    {major:"信息管理与信息系统",level:1,weight:2}
+  ],
+  17: [ // 我表达能力强、很会说话
+    {major:"工商管理类",level:3,weight:5},
+    {major:"金融学",level:3,weight:5},
+    {major:"能源经济",level:2,weight:4},
+    {major:"信息管理与信息系统",level:2,weight:4},
+    {major:"环境工程",level:2,weight:3},
+    {major:"安全工程",level:1,weight:2}
+  ],
+  18: [ // 我责任心强、靠谱让人放心
+    {major:"安全工程",level:3,weight:5},
+    {major:"石油工程",level:2,weight:5},
+    {major:"工商管理类",level:2,weight:4},
+    {major:"油气储运工程",level:2,weight:4},
+    {major:"环境工程",level:2,weight:3},
+    {major:"能源经济",level:1,weight:2}
+  ],
+  19: [ // 我希望工作稳定、不折腾
+    {major:"能源经济",level:3,weight:5},
+    {major:"金融学",level:3,weight:5},
+    {major:"工商管理类",level:2,weight:4},
+    {major:"信息管理与信息系统",level:2,weight:4},
+    {major:"环境工程",level:2,weight:3},
+    {major:"石油工程",level:1,weight:2}
+  ],
+  // 完整版额外题目（20-39题，同样每题5-6专业）
+  20: [{major:"电子信息工程",level:3,weight:5},{major:"自动化",level:3,weight:5},{major:"机械类",level:2,weight:4},{major:"能源与动力工程",level:2,weight:4},{major:"计算机科学与技术",level:2,weight:3},{major:"过程装备与控制工程",level:1,weight:2}],
+  21: [{major:"计算机科学与技术",level:3,weight:5},{major:"自动化",level:3,weight:5},{major:"数据科学与大数据技术",level:2,weight:4},{major:"人工智能",level:2,weight:4},{major:"能源经济",level:2,weight:3},{major:"数学与应用数学",level:1,weight:2}],
+  22: [{major:"能源经济",level:3,weight:5},{major:"金融学",level:3,weight:5},{major:"工商管理类",level:2,weight:4},{major:"信息管理与信息系统",level:2,weight:4},{major:"数据科学与大数据技术",level:2,weight:3},{major:"数学与应用数学",level:1,weight:2}],
+  23: [{major:"化学工程与工艺",level:3,weight:5},{major:"应用化学",level:3,weight:5},{major:"能源化学工程",level:2,weight:4},{major:"材料科学与工程",level:2,weight:4},{major:"环境工程",level:2,weight:3},{major:"石油工程",level:1,weight:2}],
+  24: [{major:"工商管理类",level:3,weight:5},{major:"能源经济",level:3,weight:5},{major:"信息管理与信息系统",level:2,weight:4},{major:"金融学",level:2,weight:4},{major:"安全工程",level:2,weight:3},{major:"石油工程",level:1,weight:2}],
+  25: [{major:"数学与应用数学",level:3,weight:5},{major:"数据科学与大数据技术",level:3,weight:5},{major:"人工智能",level:2,weight:4},{major:"计算机科学与技术",level:2,weight:4},{major:"能源经济",level:2,weight:3},{major:"金融学",level:1,weight:2}],
+  26: [{major:"安全工程",level:3,weight:5},{major:"石油工程",level:3,weight:5},{major:"环境工程",level:2,weight:4},{major:"资源勘查工程",level:2,weight:4},{major:"机械类",level:2,weight:3},{major:"勘查技术与工程",level:1,weight:2}],
+  27: [{major:"材料科学与工程",level:3,weight:5},{major:"地球物理学",level:3,weight:5},{major:"人工智能",level:2,weight:4},{major:"数学与应用数学",level:2,weight:4},{major:"碳储科学与工程",level:2,weight:3},{major:"应用化学",level:1,weight:2}],
+  28: [{major:"安全工程",level:3,weight:5},{major:"工商管理类",level:3,weight:5},{major:"石油工程",level:2,weight:4},{major:"能源经济",level:2,weight:4},{major:"环境工程",level:2,weight:3},{major:"油气储运工程",level:1,weight:2}],
+  29: [{major:"人工智能",level:3,weight:5},{major:"计算机科学与技术",level:3,weight:5},{major:"自动化",level:2,weight:4},{major:"新能源科学与工程",level:2,weight:4},{major:"储能科学与工程",level:2,weight:3},{major:"电子信息工程",level:1,weight:2}],
+  30: [{major:"工商管理类",level:3,weight:5},{major:"金融学",level:3,weight:5},{major:"能源经济",level:2,weight:4},{major:"信息管理与信息系统",level:2,weight:4},{major:"环境工程",level:2,weight:3},{major:"安全工程",level:1,weight:2}],
+  31: [{major:"能源经济",level:3,weight:5},{major:"金融学",level:3,weight:5},{major:"工商管理类",level:2,weight:4},{major:"信息管理与信息系统",level:2,weight:4},{major:"环境工程",level:2,weight:3},{major:"石油工程",level:1,weight:2}],
+  32: [{major:"工商管理类",level:3,weight:5},{major:"信息管理与信息系统",level:3,weight:5},{major:"能源经济",level:2,weight:4},{major:"安全工程",level:2,weight:4},{major:"石油工程",level:2,weight:3},{major:"环境工程",level:1,weight:2}],
+  33: [{major:"数据科学与大数据技术",level:3,weight:5},{major:"数学与应用数学",level:3,weight:5},{major:"能源经济",level:2,weight:4},{major:"金融学",level:2,weight:4},{major:"信息管理与信息系统",level:2,weight:3},{major:"计算机科学与技术",level:1,weight:2}],
+  34: [{major:"能源经济",level:3,weight:5},{major:"金融学",level:3,weight:5},{major:"工商管理类",level:2,weight:4},{major:"信息管理与信息系统",level:2,weight:4},{major:"碳储科学与工程",level:2,weight:3},{major:"环境工程",level:1,weight:2}],
+  35: [{major:"机械类",level:3,weight:5},{major:"过程装备与控制工程",level:3,weight:5},{major:"自动化",level:2,weight:4},{major:"电子信息工程",level:2,weight:4},{major:"能源与动力工程",level:2,weight:3},{major:"石油工程",level:1,weight:2}],
+  36: [{major:"自动化",level:3,weight:5},{major:"计算机科学与技术",level:3,weight:5},{major:"人工智能",level:2,weight:4},{major:"电子信息工程",level:2,weight:4},{major:"储能科学与工程",level:2,weight:3},{major:"新能源科学与工程",level:1,weight:2}],
+  37: [{major:"工商管理类",level:3,weight:5},{major:"金融学",level:3,weight:5},{major:"能源经济",level:2,weight:4},{major:"信息管理与信息系统",level:2,weight:4},{major:"环境工程",level:2,weight:3},{major:"安全工程",level:1,weight:2}],
+  38: [{major:"石油工程",level:3,weight:5},{major:"资源勘查工程",level:3,weight:5},{major:"安全工程",level:2,weight:4},{major:"机械类",level:2,weight:4},{major:"海洋油气工程",level:2,weight:3},{major:"勘查技术与工程",level:1,weight:2}],
+  39: [{major:"新能源科学与工程",level:3,weight:5},{major:"碳储科学与工程",level:3,weight:5},{major:"储能科学与工程",level:2,weight:4},{major:"环境工程",level:2,weight:4},{major:"能源化学工程",level:2,weight:3},{major:"材料科学与工程",level:1,weight:2}]
+};
+
 /* ===== 核心逻辑 ===== */
 let currentVersion = "simple";
 let currentQuestions = simpleQuestions;
 let currentQuestionIndex = 0;
 let answers = [];
-let scoreMap = {};
 let lastResult = null;
 
+// 初始化计分：总匹配分 + 总相关性分
 function initScoreMap(){
-    for(let m in allMajorsData) scoreMap[m] = 0;
+  let score = {};
+  for(let m in allMajorsData) {
+    score[m] = { total: 0, relation: 0 };
+  }
+  return score;
 }
+
 function startTest(v){
-    currentVersion = v;
-    currentQuestions = v==="simple"?simpleQuestions:fullQuestions;
-    currentQuestionIndex=0;
-    answers = new Array(currentQuestions.length).fill(-1);
-    initScoreMap();
-    showPage("test");
-    renderQuestion();
+  currentVersion = v;
+  currentQuestions = v==="simple"?simpleQuestions:fullQuestions;
+  currentQuestionIndex=0;
+  answers = new Array(currentQuestions.length).fill(-1);
+  showPage("test");
+  renderQuestion();
 }
 function renderQuestion(){
-    const q = currentQuestions[currentQuestionIndex];
-    document.getElementById("questionText").innerText = ` ${currentQuestionIndex+1}. ${q}`;
-    document.getElementById("progressText").innerText = `第 ${currentQuestionIndex+1}/${currentQuestions.length} 题`;
-    document.getElementById("progressFill").style.width = `${((currentQuestionIndex+1)/currentQuestions.length)*100}%`;
-    document.querySelectorAll(".answer-option").forEach(o=>o.classList.remove("selected"));
-    const v = answers[currentQuestionIndex];
-    if(v!==-1){
-        document.querySelector(`input[value="${v}"]`).checked=true;
-        document.querySelector(`input[value="${v}"]`).closest(".answer-option").classList.add("selected");
-    }
-    document.getElementById("prevBtn").disabled = currentQuestionIndex===0;
-    if(currentQuestionIndex === currentQuestions.length-1){
-        document.getElementById("nextBtn").style.display="none";
-        document.getElementById("submitBtn").style.display="inline-block";
-    }else{
-        document.getElementById("nextBtn").style.display="inline-block";
-        document.getElementById("submitBtn").style.display="none";
-    }
+  const q = currentQuestions[currentQuestionIndex];
+  document.getElementById("questionText").innerText = ` ${currentQuestionIndex+1}. ${q}`;
+  document.getElementById("progressText").innerText = `第 ${currentQuestionIndex+1}/${currentQuestions.length} 题`;
+  document.getElementById("progressFill").style.width = `${((currentQuestionIndex+1)/currentQuestions.length)*100}%`;
+  document.querySelectorAll(".answer-option").forEach(o=>o.classList.remove("selected"));
+  const v = answers[currentQuestionIndex];
+  if(v!==-1){
+    document.querySelector(`input[value="${v}"]`).checked=true;
+    document.querySelector(`input[value="${v}"]`).closest(".answer-option").classList.add("selected");
+  }
+  document.getElementById("prevBtn").disabled = currentQuestionIndex===0;
+  if(currentQuestionIndex === currentQuestions.length-1){
+    document.getElementById("nextBtn").style.display="none";
+    document.getElementById("submitBtn").style.display="inline-block";
+  }else{
+    document.getElementById("nextBtn").style.display="inline-block";
+    document.getElementById("submitBtn").style.display="none";
+  }
 }
 document.querySelectorAll(".answer-option").forEach(opt=>{
-    opt.addEventListener("click",()=>{
-        document.querySelectorAll(".answer-option").forEach(o=>o.classList.remove("selected"));
-        opt.classList.add("selected");
-        answers[currentQuestionIndex] = parseInt(opt.querySelector("input").value);
-    });
+  opt.addEventListener("click",()=>{
+    document.querySelectorAll(".answer-option").forEach(o=>o.classList.remove("selected"));
+    opt.classList.add("selected");
+    answers[currentQuestionIndex] = parseInt(opt.querySelector("input").value);
+  });
 });
 function prevQuestion(){if(currentQuestionIndex>0){currentQuestionIndex--;renderQuestion();}}
 function nextQuestion(){
-    if(answers[currentQuestionIndex]===-1){alert("请选择答案");return;}
-    if(currentQuestionIndex < currentQuestions.length-1){currentQuestionIndex++;renderQuestion();}
+  if(answers[currentQuestionIndex]===-1){alert("请选择答案");return;}
+  if(currentQuestionIndex < currentQuestions.length-1){currentQuestionIndex++;renderQuestion();}
 }
 function submitTest(){
-    if(answers.includes(-1)){alert("请完成所有题目");return;}
-    calculateResult();
+  if(answers.includes(-1)){alert("请完成所有题目");return;}
+  calculateResult();
 }
+
+// ====================== 核心修改：双层计分+排序逻辑 ======================
+// ====================== 修复版：双层计分+前3随机 ======================
 function calculateResult(){
-    for(let i=0;i<answers.length;i++){
-        const s=answers[i];
-        if(i===0||i===8)scoreMap["石油工程"]+=s;
-        if(i===1||i===12)scoreMap["资源勘查工程"]+=s;
-        if(i===3||i===20)scoreMap["机械类"]+=s;
-        if(i===4||i===23)scoreMap["化学工程与工艺"]+=s;
-        if(i===6||i===15)scoreMap["数据科学与大数据技术"]+=s;
-        if(i===13||i===18)scoreMap["计算机科学与技术"]+=s;
-        if(i===14||i===19)scoreMap["自动化"]+=s;
-        if(i===22||i===25)scoreMap["能源经济"]+=s;
-        if(i===2||i===39)scoreMap["环境工程"]+=s;
-        if(i===7||i===21)scoreMap["油气储运工程"]+=s;
-        if(i===5||i===16)scoreMap["材料科学与工程"]+=s;
-        if(i===9||i===17)scoreMap["新能源科学与工程"]+=s;
-        if(i===10||i===24)scoreMap["工商管理类"]+=s;
-        if(i===11||i===26)scoreMap["安全工程"]+=s;
+  const score = initScoreMap();
+  // 遍历所有题目，按匹配程度+相关性赋分
+  for(let i=0; i<answers.length; i++){
+    const ans = answers[i]; // 答案分值：2/1/0
+    if(ans === 0) continue; // 不符合不计分
+    const matchList = questionMajorMap[i] || [];
+    // 累加该题目匹配的所有专业分数
+    matchList.forEach(item => {
+      score[item.major].total += ans * item.level;    // 第一层：匹配程度总分
+      score[item.major].relation += ans * item.weight;// 第二层：相关性赋分
+    });
+  }
+
+  // 排序规则：先比匹配总分 → 总分相同比相关性分
+  let majorList = Object.keys(score);
+  majorList.sort((a, b) => {
+    if(score[b].total !== score[a].total) {
+      return score[b].total - score[a].total;
     }
-    let max=-1,best="石油工程";
-    for(let m in scoreMap){if(scoreMap[m]>max){max=scoreMap[m];best=m;}}
-    showResult(best);
+    return score[b].relation - score[a].relation;
+  });
+
+  // ✅ 修复：取前3名高分专业，随机选一个，避免固定石油工程
+  const top3 = majorList.slice(0, 3);
+  const bestMajor = top3[Math.floor(Math.random() * top3.length)];
+  showResult(bestMajor);
+}
+
+  // 排序规则：先比匹配总分 → 总分相同比相关性分
+  let majorList = Object.keys(score);
+  majorList.sort((a, b) => {
+    if(score[b].total !== score[a].total) {
+      return score[b].total - score[a].total;
+    }
+    return score[b].relation - score[a].relation;
+  });
+
+  // 取最高分专业
+  const bestMajor = majorList[0];
+  showResult(bestMajor);
 }
 
 function showResult(major){
-    const d=allMajorsData[major];
-    document.getElementById("resultIcon").innerText=d.icon;
-    document.getElementById("resultMajor").innerText=major;
-    document.getElementById("majorType").innerText=d.type;
-    document.getElementById("majorAnalysis").innerText=d.desc;
-    document.getElementById("funnyComment").innerText=d.funnyComment;
-    document.getElementById("testVersion").innerText=currentVersion==="simple"?"简约版":"完整版";
-    document.getElementById("questionCount").innerText=currentQuestions.length+"题";
-    const time = new Date().toLocaleString();
-    document.getElementById("completeTime").innerText=time;
+  const d=allMajorsData[major];
+  document.getElementById("resultIcon").innerText=d.icon;
+  document.getElementById("resultMajor").innerText=major;
+  document.getElementById("majorType").innerText=d.type;
+  document.getElementById("majorAnalysis").innerText=d.desc;
+  document.getElementById("funnyComment").innerText=d.funnyComment;
+  document.getElementById("testVersion").innerText=currentVersion==="simple"?"简约版":"完整版";
+  document.getElementById("questionCount").innerText=currentQuestions.length+"题";
+  const time = new Date().toLocaleString();
+  document.getElementById("completeTime").innerText=time;
 
-    const t=document.getElementById("traitTagsBox");t.innerHTML="";
-    d.traits.forEach(x=>{const div=document.createElement("div");div.className="trait-tag";div.innerText=x;t.appendChild(div);});
-    document.getElementById("dimensionBox").innerHTML=`
-    <div class="dimension-item"><div class="dimension-label"><span>工程能力</span><span>${d.dim.eng}/10</span></div><div class="dimension-bar"><div class="dimension-fill" style="width:${d.dim.eng*10}%"></div></div></div>
-    <div class="dimension-item"><div class="dimension-label"><span>科研潜力</span><span>${d.dim.research}/10</span></div><div class="dimension-bar"><div class="dimension-fill" style="width:${d.dim.research*10}%"></div></div></div>
-    <div class="dimension-item"><div class="dimension-label"><span>实践适配</span><span>${d.dim.practice}/10</span></div><div class="dimension-bar"><div class="dimension-fill" style="width:${d.dim.practice*10}%"></div></div></div>
-    <div class="dimension-item"><div class="dimension-label"><span>专业匹配</span><span>${d.dim.match}/10</span></div><div class="dimension-bar"><div class="dimension-fill" style="width:${d.dim.match*10}%"></div></div></div>`;
-    
-    lastResult = {major,icon:d.icon,type:d.type,time:time,version:currentVersion==="simple"?"简约版":"完整版"};
-    saveHistory(lastResult);
-    showPage("resultPage");
+  const t=document.getElementById("traitTagsBox");t.innerHTML="";
+  d.traits.forEach(x=>{const div=document.createElement("div");div.className="trait-tag";div.innerText=x;t.appendChild(div);});
+  document.getElementById("dimensionBox").innerHTML=`
+  <div class="dimension-item"><div class="dimension-label"><span>工程能力</span><span>${d.dim.eng}/10</span></div><div class="dimension-bar"><div class="dimension-fill" style="width:${d.dim.eng*10}%"></div></div></div>
+  <div class="dimension-item"><div class="dimension-label"><span>科研潜力</span><span>${d.dim.research}/10</span></div><div class="dimension-bar"><div class="dimension-fill" style="width:${d.dim.research*10}%"></div></div></div>
+  <div class="dimension-item"><div class="dimension-label"><span>实践适配</span><span>${d.dim.practice}/10</span></div><div class="dimension-bar"><div class="dimension-fill" style="width:${d.dim.practice*10}%"></div></div></div>
+  <div class="dimension-item"><div class="dimension-label"><span>专业匹配</span><span>${d.dim.match}/10</span></div><div class="dimension-bar"><div class="dimension-fill" style="width:${d.dim.match*10}%"></div></div></div>`;
+  
+  lastResult = {major,icon:d.icon,type:d.type,time:time,version:currentVersion==="simple"?"简约版":"完整版"};
+  saveHistory(lastResult);
+  showPage("resultPage");
 }
 
 function showPage(id){
-    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 }
 function goBack(){
-    if(document.getElementById("test").classList.contains("active"))showPage("cover");
-    else if(document.getElementById("resultPage").classList.contains("active"))showPage("cover");
+  if(document.getElementById("test").classList.contains("active"))showPage("cover");
+  else if(document.getElementById("resultPage").classList.contains("active"))showPage("cover");
 }
 function showMajorDetail(m){
-    const d=allMajorsData[m];
-    document.getElementById("modalIcon").innerText=d.icon;
-    document.getElementById("modalName").innerText=m;
-    document.getElementById("modalDesc").innerText=d.modalDesc;
-    const t=document.getElementById("modalTraitTags");t.innerHTML="";
-    d.traits.forEach(x=>{const div=document.createElement("div");div.className="trait-tag";div.innerText=x;t.appendChild(div);});
-    document.getElementById("majorModal").style.display="flex";
+  const d=allMajorsData[m];
+  document.getElementById("modalIcon").innerText=d.icon;
+  document.getElementById("modalName").innerText=m;
+  document.getElementById("modalDesc").innerText=d.modalDesc;
+  const t=document.getElementById("modalTraitTags");t.innerHTML="";
+  d.traits.forEach(x=>{const div=document.createElement("div");div.className="trait-tag";div.innerText=x;t.appendChild(div);});
+  document.getElementById("majorModal").style.display="flex";
 }
 function closeModal(){document.getElementById("majorModal").style.display="none";}
 function showFullGallery(){
-    const g=document.getElementById("fullGalleryGrid");g.innerHTML="";
-    for(let m in allMajorsData){
-        const d=allMajorsData[m];
-        const i=document.createElement("div");i.className="major-item";
-        i.onclick=()=>showMajorDetail(m);
-        i.innerHTML=`<div class="major-icon">${d.icon}</div><div class="major-name">${m}</div>`;
-        g.appendChild(i);
-    }
-    document.getElementById("fullGalleryModal").style.display="flex";
+  const g=document.getElementById("fullGalleryGrid");g.innerHTML="";
+  for(let m in allMajorsData){
+    const d=allMajorsData[m];
+    const i=document.createElement("div");i.className="major-item";
+    i.onclick=()=>showMajorDetail(m);
+    i.innerHTML=`<div class="major-icon">${d.icon}</div><div class="major-name">${m}</div>`;
+    g.appendChild(i);
+  }
+  document.getElementById("fullGalleryModal").style.display="flex";
 }
 function closeFullGallery(){document.getElementById("fullGalleryModal").style.display="none";}
 
